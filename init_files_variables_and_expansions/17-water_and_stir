@@ -1,2 +1,2 @@
 #!/bin/bash
-bestchol=$(expr $water + $stir.)
+printf '%s\n' "$WATER$STIR" | tr -d '[:digit:]'
