@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "obase=6; ibase=10; $(($(echo $WATER | tr 'ewat.r' '0-5') + $(echo $STIR | tr 'ti.r' '0-3')))" | bc | tr '012345' 'bestchol'
+
