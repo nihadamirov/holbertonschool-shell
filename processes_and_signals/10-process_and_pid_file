@@ -2,10 +2,13 @@
 # Script that creates PID file, displays messages indefinitely,
 # and handles different signals appropriately
 
+# Fayl yolu dəyişkənliklə idarə olunur (default: /tmp)
+PID_FILE=${PID_FILE:-/tmp/myscript.pid}
+
 # Function to handle SIGTERM signal
 sigterm_handler() {
     echo "I hate the kill command"
-    rm -f /var/run/myscript.pid
+    rm -f "$PID_FILE"
     exit 0
 }
 
@@ -16,12 +19,12 @@ sigint_handler() {
 
 # Function to handle SIGQUIT signal
 sigquit_handler() {
-    rm -f /var/run/myscript.pid
+    rm -f "$PID_FILE"
     exit 0
 }
 
 # Create PID file
-echo $$ > /var/run/myscript.pid
+echo $$ > "$PID_FILE"
 
 # Trap signals
 trap sigterm_handler SIGTERM
@@ -34,3 +37,4 @@ do
     echo "To infinity and beyond"
     sleep 2
 done
+
