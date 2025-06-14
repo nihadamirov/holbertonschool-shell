@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2009
 # Script that stops 4-to_infinity_and_beyond process WITHOUT using kill/killall/pkill
 
-pid=$(ps -ef | grep '4-to_infinity_and_beyond' | grep -v grep | awk '{print $2}')
+pid=$(ps -eo pid,cmd | grep '[4]-to_infinity_and_beyond' | awk '{print $1}')
 
 if [ -n "$pid" ]; then
   echo "Stopping PID $pid"
-  # Send SIGTERM manually by writing to /proc
-  echo "0" > /proc/$pid/oom_score_adj 2>/dev/null
-  exec 3<>/proc/$pid/fd/0 || exit 1
+  echo "0" > "/proc/$pid/oom_score_adj" 2>/dev/null
+  exec 3<>"/proc/$pid/fd/0" || exit 1
   echo "exit" >&3
   exec 3>&-
 fi
