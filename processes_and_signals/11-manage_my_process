@@ -1,35 +1,43 @@
 #!/usr/bin/env bash
 # Init script that manages manage_my_process daemon
-
 PIDFILE="/var/run/my_process.pid"
 SCRIPT="./manage_my_process"
 
 case "$1" in
     start)
+        if [ -f "$PIDFILE" ]; then
+            echo "manage_my_process is already running (PID: $(cat $PIDFILE))"
+            exit 1
+        fi
         echo "manage_my_process started"
         $SCRIPT &
-        echo $! > $PIDFILE
+        echo $! > "$PIDFILE"
         ;;
     stop)
         echo "manage_my_process stopped"
-        if [ -f $PIDFILE ]; then
-            kill "$(cat $PIDFILE)"
-            rm -f $PIDFILE
+        if [ -f "$PIDFILE" ]; then
+            PID=$(cat "$PIDFILE")
+            kill "$PID" 2>/dev/null
+            rm -f "$PIDFILE"
+        else
+            echo "PID file not found, process may not be running"
         fi
         ;;
     restart)
         echo "manage_my_process restarted"
-        if [ -f $PIDFILE ]; then
-            kill "$(cat $PIDFILE)"
-            rm -f $PIDFILE
+        # Stop the process
+        if [ -f "$PIDFILE" ]; then
+            PID=$(cat "$PIDFILE")
+            kill "$PID" 2>/dev/null
+            rm -f "$PIDFILE"
         fi
+        # Start the process
         $SCRIPT &
-        echo $! > $PIDFILE
+        echo $! > "$PIDFILE"
         ;;
     *)
-        echo "Usage: manage_my_process {start|stop|restart}"
+        echo "Usage: $0 {start|stop|restart}"
         exit 1
         ;;
 esac
-
 exit 0
