@@ -2,7 +2,7 @@
 # Script that creates PID file, displays messages indefinitely,
 # and handles different signals appropriately
 
-PID_FILE=${PID_FILE:-/var/run/my_process.pid}
+PID_FILE=${PID_FILE:-/var/run/myscript.pid}
 
 sigterm_handler() {
     echo "I hate the kill command"
