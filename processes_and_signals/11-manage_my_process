@@ -19,8 +19,6 @@ case "$1" in
             PID=$(cat "$PIDFILE")
             kill "$PID" 2>/dev/null
             rm -f "$PIDFILE"
-        else
-            echo "PID file not found, process may not be running"
         fi
         ;;
     restart)
