@@ -1,17 +1,5 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2009
-# Script that stops 4-to_infinity_and_beyond without using kill
+# Script that stops 4-to_infinity_and_beyond process
 
-pid=$(pgrep -f '4-to_infinity_and_beyond')
-
-if [ -z "$pid" ]; then
-  pid=$(ps -eo pid,cmd | grep '4-to_infinity_and_beyond' | grep -v grep | awk '{print $1}')
-fi
-
-if [ -n "$pid" ]; then
-  echo "0" > "/proc/$pid/oom_score_adj" 2>/dev/null
-  exec 3<>"/proc/$pid/fd/0" || exit 1
-  echo "exit" >&3
-  exec 3>&-
-fi
-
+pkill -f 4-to_infinity_and_beyond
